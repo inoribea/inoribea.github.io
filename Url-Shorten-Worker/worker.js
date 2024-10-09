@@ -5,13 +5,13 @@ const config = {
   unique_link: false, // If it is true, the same long url will be shorten into the same short url
   custom_link: true, // Allow users to customize the short url.
   overwrite_kv: false, // Allow user to overwrite an existed key.
-  snapchat_mode: false, // The link will be distroyed after access.
+  snapchat_mode: true, // The link will be distroyed after access.
   visit_count: false, // Count visit times.
   load_kv: false, // Load all from Cloudflare KV
   system_type: "shorturl", // shorturl, imghost, other types {pastebin, journal}
 }
 
-// key in protect_keylist can't read, add, del from UI and API
+// key in protect_keylist can't read, add, del from UI 和 API
 const protect_keylist = [
   "password",
 ]
@@ -19,20 +19,14 @@ const protect_keylist = [
 let index_html = "https://inoribea.github.io/Url-Shorten-Worker/" + config.theme + "/index.html"
 let result_html = "https://inoribea.github.io/Url-Shorten-Worker/" + config.theme + "/result.html"
 
-const html404 = new URL(request.url)
-let path = requestURL.pathname.split("/")[1]
-path = decodeURIComponent(path);
-const params = requestURL.search;
-
-// console.log(path)
-// 如果path为空, 即直接访问本worker
-// If visit this worker directly (no path)
-if (!path) {
-  return Response.redirect("imghub.inoribea.top", 302)
-  /* new Response(html404, {
-    headers: response_header,
-    status: 404
-  }) */
+const html404 = `<!DOCTYPE html>
+  <html>
+  <body>
+    <h1>404 Not Found.</h1>
+    <p>The url you visit is not found.</p>
+    <p> <a href="https://github.com/inoribea/Url-Shorten-Worker/" target="_self">Fork me on GitHub</a> </p>
+  </body>
+  </html>`
 
 let response_header = {
   "Content-type": "text/html;charset=UTF-8;application/json",
@@ -300,7 +294,7 @@ async function handleRequest(request) {
   // 如果path为空, 即直接访问本worker
   // If visit this worker directly (no path)
   if (!path) {
-    return Response.redirect("imghub.inoribea.top", 302)
+    return Response.redirect("https://imghub.inoribea.top", 302)
     /* new Response(html404, {
       headers: response_header,
       status: 404
@@ -395,6 +389,6 @@ async function handleRequest(request) {
   }
 }
 
-addEventListener("fetch", async event => {
+addEventListener("fetch"， async event => {
   event.respondWith(handleRequest(event.request))
 })
