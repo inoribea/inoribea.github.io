@@ -1,5 +1,5 @@
 const config = {
-  result_page: false, // After get the value from KV, if use a page to show the result.
+  result_page: true, // After get the value from KV, if use a page to show the result.
   theme: "", // Homepage theme, use the empty value for default theme. To use urlcool theme, please fill with "theme/urlcool" .
   cors: true, // Allow Cross-origin resource sharing for API requests.
   unique_link: false, // If it is true, the same long url will be shorten into the same short url
@@ -294,7 +294,7 @@ async function handleRequest(request) {
   // 如果path为空, 即直接访问本worker
   // If visit this worker directly (no path)
   if (!path) {
-    return Response.redirect("https://pixiv.inoribea.top", 302)
+    return Response.redirect("https://imghub.inoribea.top", 302)
     /* new Response(html404, {
       headers: response_header,
       status: 404
